@@ -1,5 +1,5 @@
 spring:
   application:
-    name: glemoa-reader
+    name: glemoa-member
   profiles:
     active: local

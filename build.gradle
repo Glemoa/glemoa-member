@@ -33,12 +33,19 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    //	eureka client 의존성 추가
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+    //	jwt토큰 관련 라이브러리 추가
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'  // JSON 처리에 필요
 }
 
 dependencyManagement {
@@ -49,4 +56,13 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+// 빌드 될 떄 '0.0.1-SNAPSHOT' << 이거 안붙이게 함.
+tasks.withType(org.springframework.boot.gradle.tasks.bundling.BootJar) {
+    archiveVersion.set('')
 }

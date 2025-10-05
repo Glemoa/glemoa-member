@@ -6,9 +6,13 @@ eureka:
       # 유레카 서버가 어디에 있는지를 위치 정보를 여기다가 명시해 둔 것이다.
       defaultZone: http://localhost:8761/eureka/
 server:
-  port: 8081
+  port: 8083
 
 spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
   datasource:
     # MySQL 드라이버 지정
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -22,4 +26,14 @@ spring:
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
+
+jwt:
+  expiration: 1000
+  #  Base64로 인코딩된 문자 32자 이상 필요.(특수문자안됨) -> 재미나이 설명으로는 최소 88자 필요
+  #  beyondaccesstokensecretkeybeyondaccesstokensecretkeybeyondaccesstokensecretkey
+  secretKey: YmV5b25kYWNjZXNzdG9rZW5zZWNyZXRrZXliZXlvbmRhY2Nlc3N0b2tlbnNlY3JldGtleWJleW9uZGFjY2Vzc3Rva2Vuc2VjcmV0a2V5
+
+  expirationRt: 288000
+  #  beyondrefreshtokensecretkeybeyondrefreshtokensecretkeybeyondrefreshtokensecretkey
+  secretKeyRt: YmV5b25kcmVmcmVzaHRva2Vuc2VjcmV0a2V5YmV5b25kcmVmcmVzaHRva2Vuc2VjcmV0a2V5YmV5b25kcmVmcmVzaHRva2Vuc2VjcmV0a2V5

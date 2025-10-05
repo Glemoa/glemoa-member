@@ -1,2 +1,11 @@
-package hyunsub.glemoamember.member.repository;public interface MemberRepository {
+package hyunsub.glemoamember.member.repository;
+
+import hyunsub.glemoamember.member.domain.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+
+public interface MemberRepository extends JpaRepository<Member, Long> {
+    Optional<Member> findByEmail(String email);
 }
