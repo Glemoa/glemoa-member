@@ -41,10 +41,11 @@ public class JwtTokenProvider {
                 Base64.getDecoder().decode(secretKeyRt), "HmacSHA512");
     }
 
-    public String createAccessToken(String email, String role) {
+    public String createAccessToken(String id, String email, String role) {
         // claims는 사용자정보(페이로드 정보)
         Claims claims = Jwts.claims();
-        claims.setSubject(email);
+        claims.setSubject(id);
+        claims.put("email", email);
         claims.put("role", role);
         Date now = new Date();
 
@@ -58,9 +59,10 @@ public class JwtTokenProvider {
         return accessToken;
     }
 
-    public String createRefreshToken(String email, String role) {
+    public String createRefreshToken(String id, String email, String role) {
         Claims claims = Jwts.claims();
-        claims.setSubject(email);
+        claims.setSubject(id);
+        claims.put("email", email);
         claims.put("role", role);
         Date now = new Date();
 

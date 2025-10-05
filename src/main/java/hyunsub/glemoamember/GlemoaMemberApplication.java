@@ -9,5 +9,4 @@ public class GlemoaMemberApplication {
     public static void main(String[] args) {
         SpringApplication.run(GlemoaMemberApplication.class, args);
     }
-
 }
