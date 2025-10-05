@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: glemoa-reader
+  profiles:
+    active: local
