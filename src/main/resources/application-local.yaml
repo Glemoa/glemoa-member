@@ -26,7 +26,7 @@ spring:
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
 
 jwt:
   expiration: 1000
