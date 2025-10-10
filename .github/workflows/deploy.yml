@@ -1,5 +1,5 @@
 # GitHub Actions 워크플로우의 이름을 지정합니다.
-name: Deploy Gateway to Server
+name: Deploy Member Service to Server
 
 # 워크플로우가 트리거될 이벤트를 지정합니다.
 on:
@@ -59,9 +59,10 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "*.jar"
-          target: "/home/ubuntu/gateway/" # 서버의 배포 디렉토리
+          # 🚨 Member 서비스 배포 디렉토리
+          target: "/home/ubuntu/member/"
 
-      # 3. 서버에서 배포 스크립트 실행 (SSH) 좀 되라 제발!!!@ -> 자바 버전 업데이트를 안했었다..
+      # 3. 서버에서 배포 스크립트 실행 (SSH)
       - name: Execute deployment script on server
         uses: appleboy/ssh-action@master
         with:
@@ -70,16 +71,16 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           command_timeout: 10m
           script: |
-            DEPLOY_DIR="/home/ubuntu/gateway"
+            DEPLOY_DIR="/home/ubuntu/member"
             mkdir -p $DEPLOY_DIR && cd $DEPLOY_DIR
 
-            APP_PORT=${APP_PORT:-8080}
+            APP_PORT=${APP_PORT:-8083}
             echo "Using APP_PORT=$APP_PORT"
 
-            JAR_FILE=$(ls -1t glemoa-gateway*.jar 2>/dev/null | grep -v plain | head -n 1)
+            JAR_FILE=$(ls -1t glemoa-member*.jar 2>/dev/null | grep -v plain | head -n 1)
 
             if [ -z "$JAR_FILE" ]; then
-              echo "❌ No gateway JAR found in $DEPLOY_DIR. Listing contents:"
+              echo "❌ No member JAR found in $DEPLOY_DIR. Listing contents:"
               ls -al .
               exit 1
             fi
@@ -90,10 +91,27 @@ jobs:
             pkill -f "$JAR_NAME" || true
             sleep 5
 
+            # (application-prod.yaml 및 application-local.yaml 기반)
             nohup java -jar \
               -Dspring.profiles.active=prod \
+              \
+              -Dserver.port=$APP_PORT \
+              \
+              -Deureka.client.serviceUrl.defaultZone=http://${{ secrets.EUREKA_SERVER_URL }}:8761/eureka/ \
+              \
+              -Dspring.data.redis.host=${{ secrets.REDIS_HOST }} \
+              -Dspring.data.redis.port=${{ secrets.REDIS_PORT }} \
+              \
+              -Dspring.datasource.url=jdbc:mysql://${{ secrets.DB_HOST }}:3306/Glemoa \
+              -Dspring.datasource.username=${{ secrets.DB_USERNAME }} \
+              -Dspring.datasource.password=${{ secrets.DB_PASSWORD }} \
+              \
               -Djwt.secretKey=${{ secrets.JWT_SECRET_KEY }} \
-              "$JAR_NAME" > gateway.log 2>&1 &
+              -Djwt.expiration=${{ secrets.JWT_EXPIRATION }} \
+              -Djwt.secretKeyRt=${{ secrets.JWT_SECRET_KEY_RT }} \
+              -Djwt.expirationRt=${{ secrets.JWT_EXPIRATION_RT }} \
+              \
+              "$JAR_NAME" > member.log 2>&1 & # 로그 파일명 변경
 
             echo "Started $JAR_NAME, waiting for application to start on port $APP_PORT..."
 
@@ -115,8 +133,8 @@ jobs:
 
             if [ $timeout -le 0 ]; then
               echo "Error: Application failed to start within the timeout period."
-              echo "---- Last 200 lines of gateway.log ----"
-              tail -n 200 gateway.log || true
+              echo "---- Last 200 lines of member.log ----"
+              tail -n 200 member.log || true
               exit 1
             fi
 
