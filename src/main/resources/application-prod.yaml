@@ -28,14 +28,11 @@ spring:
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
 
-# JWT 설정 (모든 비밀 키 및 설정값을 환경 변수에서 가져옴)
+# JWT 설정 추가
 jwt:
-  # Access Token 설정
-  secretKey: ${JWT_SECRET_KEY}
-  expiration: ${JWT_EXPIRATION} # 예: 1000
-
-  # Refresh Token 설정
+  expiration: ${JWT_EXPIRATION}
+  secretKey: ${JWT_SECRET_KEY} # GitHub Secrets에 정의한 변수 이름과 일치시켜야 함
+  expirationRt: ${JWT_EXPIRATION_RT}
   secretKeyRt: ${JWT_SECRET_KEY_RT}
-  expirationRt: ${JWT_EXPIRATION_RT} # 예: 288000
