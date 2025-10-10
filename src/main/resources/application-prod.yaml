@@ -10,6 +10,11 @@ server:
   port: 8080
 
 spring:
+  # Redis 설정 추가 (로컬 설정을 기반으로 환경 변수화)
+  data:
+    redis:
+      host: ${REDIS_HOST} # Redis 서버 주소 (환경 변수)
+      port: ${REDIS_PORT} # Redis 포트 (환경 변수)
   datasource:
     # MySQL 드라이버 지정
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -24,3 +29,13 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
+
+# JWT 설정 (모든 비밀 키 및 설정값을 환경 변수에서 가져옴)
+jwt:
+  # Access Token 설정
+  secretKey: ${JWT_SECRET_KEY}
+  expiration: ${JWT_EXPIRATION} # 예: 1000
+
+  # Refresh Token 설정
+  secretKeyRt: ${JWT_SECRET_KEY_RT}
+  expirationRt: ${JWT_EXPIRATION_RT} # 예: 288000

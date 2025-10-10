@@ -18,15 +18,22 @@ public class BookMarkController {
         this.bookMarkService = bookMarkService;
     }
 
-    @PostMapping("/doSave")
-    public ResponseEntity<?> saveBookMark(@RequestBody PostIdDto dto,
+    @PostMapping("/doBookMark")
+    public ResponseEntity<?> doBookMark(@RequestBody PostIdDto dto,
                                           @RequestHeader("X-User-Id") String xUserId) {
-        bookMarkService.saveBookMark(dto, xUserId);
+        bookMarkService.doBookMark(dto, xUserId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/viewBookMark")
-    public ResponseEntity<?> viewBookMark(@RequestHeader("X-User-Id") String xUserId) {
+    @GetMapping("/viewBookMaredPostId")
+    public ResponseEntity<?> viewBookMarkedPostId(@RequestHeader("X-User-Id") String xUserId) {
+        List<Long> bookmaredPostId = bookMarkService.viewBookMarkedPostId(xUserId);
+
+        return new ResponseEntity<>(bookmaredPostId, HttpStatus.OK);
+    }
+
+    @GetMapping("/viewBookMarkPost")
+    public ResponseEntity<?> viewBookMarkPost(@RequestHeader("X-User-Id") String xUserId) {
         List<PostDto> bookmaredPost = bookMarkService.viewBookMarkedPost(xUserId);
 
         return new ResponseEntity<>(bookmaredPost, HttpStatus.OK);

@@ -28,22 +28,44 @@ public class BookMarkService {
         this.readerFeign = readerFeign;
     }
 
-    public void saveBookMark(PostIdDto dto, String xUserId) {
-        PostDto PostDto = readerFeign.findByPostId(dto.getPostId());
+    public void doBookMark(PostIdDto dto, String xUserId) {
         Optional<Member> optionalMember = memberRepository.findById(Long.parseLong(xUserId));
 
-        if (optionalMember.isEmpty() || PostDto == null) {
+        if (optionalMember.isEmpty()) {
             throw new RuntimeException("Member not found");
         }
 
         Member member = optionalMember.get();
 
-        BookMark bookMark = BookMark.builder()
-                .postId(dto.getPostId())
-                .member(member)
-                .build();
+        Optional<BookMark> optionalBookMark = bokBookMarkRepository.findByPostIdAndMemberId(dto.getPostId(), member.getId());
 
-        bokBookMarkRepository.save(bookMark);
+        if (optionalBookMark.isPresent()) {
+            // 즐겨찾기가 이미 존재 한다면 삭제
+            bokBookMarkRepository.delete(optionalBookMark.get());
+        } else {
+            // 즐겨찾기가 없다면 추가
+            PostDto PostDto = readerFeign.findByPostId(dto.getPostId());
+            if (PostDto == null) {
+                throw new RuntimeException("Post not found");
+            }
+            BookMark bookMark = BookMark.builder()
+                    .postId(dto.getPostId())
+                    .member(member)
+                    .build();
+            bokBookMarkRepository.save(bookMark);
+        }
+    }
+
+    public List<Long> viewBookMarkedPostId(String xUserId) {
+        List<BookMark> bookMarks = bokBookMarkRepository.findBookMarkByMemberId(Long.parseLong(xUserId));
+
+        List<Long> postIdList = new ArrayList<>();
+
+        for(BookMark bookMark : bookMarks) {
+            postIdList.add(bookMark.getPostId());
+        }
+
+        return postIdList;
     }
 
     public List<PostDto> viewBookMarkedPost(String xUserId) {
