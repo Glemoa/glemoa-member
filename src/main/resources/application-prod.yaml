@@ -28,7 +28,7 @@ spring:
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
 
 # JWT 설정 추가
 jwt:
