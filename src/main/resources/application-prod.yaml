@@ -30,7 +30,7 @@ spring:
     hibernate:
       ddl-auto: update
 
-# JWT 설정 추 가
+# JWT 설정 추가
 jwt:
   expiration: ${JWT_EXPIRATION}
   secretKey: ${JWT_SECRET_KEY} # GitHub Secrets에 정의한 변수 이름과 일치시켜야 함
