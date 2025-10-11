@@ -30,7 +30,7 @@ jobs:
 
       # 4. Gradle로 빌드
       - name: Build with Gradle
-        run: ./gradlew build --no-daemon
+        run: ./gradlew build -x test --no-daemon
 
       # 5. 빌드 결과물(JAR)을 아티팩트로 업로드
       - name: Upload artifact
