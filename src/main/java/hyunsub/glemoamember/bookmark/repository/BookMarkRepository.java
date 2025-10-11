@@ -10,5 +10,7 @@ import java.util.Optional;
 @Repository
 public interface BookMarkRepository extends JpaRepository<BookMark, Long> {
     List<BookMark> findBookMarkByMemberId(Long memberId);
+    // 특정 memberId가 저장한 모든 북마크를 찾고, 그 결과를 createdTime을 기준으로 내림차순 정렬하여 List로 반환합니다.
+    List<BookMark> findByMemberIdOrderByCreatedTimeDesc(Long memberId);
     Optional<BookMark> findByPostIdAndMemberId(Long postId, Long memberId);
 }

@@ -69,7 +69,7 @@ public class BookMarkService {
     }
 
     public List<PostDto> viewBookMarkedPost(String xUserId) {
-        List<BookMark> bookMarks = bokBookMarkRepository.findBookMarkByMemberId(Long.parseLong(xUserId));
+        List<BookMark> bookMarks = bokBookMarkRepository.findByMemberIdOrderByCreatedTimeDesc(Long.parseLong(xUserId));
 
         List<Long> postIdList = new ArrayList<>();
 
