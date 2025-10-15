@@ -1,6 +1,6 @@
 package hyunsub.glemoamember.bookmark.controller;
 
-import hyunsub.glemoamember.bookmark.dto.PostDto;
+import hyunsub.glemoamember.bookmark.dto.BookmarkPageResDto;
 import hyunsub.glemoamember.bookmark.dto.PostIdDto;
 import hyunsub.glemoamember.bookmark.service.BookMarkService;
 import org.springframework.http.HttpStatus;
@@ -33,8 +33,11 @@ public class BookMarkController {
     }
 
     @GetMapping("/viewBookMarkPost")
-    public ResponseEntity<?> viewBookMarkPost(@RequestHeader("X-User-Id") String xUserId) {
-        List<PostDto> bookmaredPost = bookMarkService.viewBookMarkedPost(xUserId);
+    public ResponseEntity<?> viewBookMarkPost(@RequestHeader("X-User-Id") String xUserId,
+                                              @RequestParam("page") Long page,
+                                              @RequestParam("pageSize") Long pageSize,
+                                              @RequestParam("movablePageCount") Long movablePageCount) {
+        BookmarkPageResDto bookmaredPost = bookMarkService.viewBookMarkedPost(xUserId, page, pageSize, movablePageCount);
 
         return new ResponseEntity<>(bookmaredPost, HttpStatus.OK);
     }
