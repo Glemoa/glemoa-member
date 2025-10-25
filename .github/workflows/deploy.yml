@@ -90,6 +90,8 @@ jobs:
 
             pkill -f "$JAR_NAME" || true
             sleep 5
+            
+            export GOOGLE_CLIENT_SECRET ='${{ secrets.GOOGLE_CLIENT_SECRET }}'
 
             # (application-prod.yaml 및 application-local.yaml 기반)
             nohup java -jar \

@@ -1,6 +1,8 @@
 package hyunsub.glemoamember.member.service;
 
 import hyunsub.glemoamember.member.domain.Member;
+import hyunsub.glemoamember.member.dto.GoogleProfileDto;
+import hyunsub.glemoamember.member.dto.KakaoProfileDto;
 import hyunsub.glemoamember.member.dto.MemberLoginReqDto;
 import hyunsub.glemoamember.member.dto.MemberSaveReqDto;
 import hyunsub.glemoamember.member.repository.MemberRepository;
@@ -25,6 +27,10 @@ public class MemberService {
         return memberRepository.findByEmail(memberEmail);
     }
 
+    public Optional<Member> findBySocialId(String socialId) {
+        return memberRepository.findBySocialId(socialId);
+    }
+
     public Long saveMember(MemberSaveReqDto dto) {
         Optional<Member> optionalMember = findByEmail(dto.getEmail());
         if(optionalMember.isPresent()) {
@@ -34,6 +40,30 @@ public class MemberService {
         Member member = memberRepository.save(dto.toEntity(encodePassword));
 
         return member.getId();
+    }
+
+    public Member loginMemberWithGoogle(GoogleProfileDto dto) {
+        Optional<Member> optionalMember = findBySocialId(dto.getSub());
+
+        if(optionalMember.isEmpty()) {
+            // 회원가입이 되어 있지 않다면 회원가입을 시켜준다.
+            Member member = memberRepository.save(dto.toEntity(dto.getSub()));
+            return member;
+        }
+
+        return optionalMember.get();
+    }
+
+    public Member loginMemberWithKakao(KakaoProfileDto dto) {
+        Optional<Member> optionalMember = findBySocialId(dto.getId());
+
+        if(optionalMember.isEmpty()) {
+            // 회원가입이 되어 있지 않다면 회원가입을 시켜준다.
+            Member member = memberRepository.save(dto.toEntity(dto.getId()));
+            return member;
+        }
+
+        return optionalMember.get();
     }
     
     public Member loginMember(MemberLoginReqDto dto) {

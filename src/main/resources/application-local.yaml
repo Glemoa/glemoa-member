@@ -37,3 +37,12 @@ jwt:
   expirationRt: 288000
   #  beyondrefreshtokensecretkeybeyondrefreshtokensecretkeybeyondrefreshtokensecretkey
   secretKeyRt: YmV5b25kcmVmcmVzaHRva2Vuc2VjcmV0a2V5YmV5b25kcmVmcmVzaHRva2Vuc2VjcmV0a2V5YmV5b25kcmVmcmVzaHRva2Vuc2VjcmV0a2V5
+
+oauth:
+  google:
+    client-id: 1016866503845-g2stk5ilu15a3i4qj492md1lk85s76v4.apps.googleusercontent.com
+    # 이 redirect-uri는 최초에 우리가 설정했던 uri가 어떤 건지를 다시 한번 증명하는 과정임.
+    redirect-uri: http://localhost:3000/oauth/google/redirect
+  kakao:
+    client-id: 4c59ef5dce393223983be904010b1b73
+    redirect-uri: http://localhost:3000/oauth/kakao/redirect
