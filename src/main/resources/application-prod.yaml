@@ -48,7 +48,7 @@ oauth:
     client-id: 1016866503845-g2stk5ilu15a3i4qj492md1lk85s76v4.apps.googleusercontent.com
     client-secret: ${GOOGLE_CLIENT_SECRET}
     # 이 redirect-uri는 최초에 우리가 설정했던 uri가 어떤 건지를 다시 한번 증명하는 과정임.
-    redirect-uri: http://www.glemoa.shop/oauth/google/redirect
+    redirect-uri: https://www.glemoa.shop/oauth/google/redirect
   kakao:
     client-id: 4c59ef5dce393223983be904010b1b73
-    redirect-uri: http://www.glemoa.shop/oauth/kakao/redirect
+    redirect-uri: https://www.glemoa.shop/oauth/kakao/redirect
