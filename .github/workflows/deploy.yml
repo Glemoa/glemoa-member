@@ -62,7 +62,7 @@ jobs:
           # 🚨 Member 서비스 배포 디렉토리
           target: "/home/ubuntu/member/"
 
-      # 3. 서버에서 배포 스크립트 실행 (SSH)
+      # 3. 서버에서 배포 스크립트 실행 (SSH )
       - name: Execute deployment script on server
         uses: appleboy/ssh-action@master
         with:
